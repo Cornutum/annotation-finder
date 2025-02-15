@@ -7,18 +7,18 @@
 
 package org.cornutum.annotation;
 
+import static org.cornutum.annotation.TestFiles.*;
+
 import org.junit.Test;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -30,7 +30,7 @@ public class FlatMapIteratorTest
   public void whenAcceptAll()
     {
     // Given...
-    FlatMapIterator<File,File> iterator = new FilesIterator( getResourceFile( "Files"));
+    FlatMapIterator<File,File> iterator = new FilesIterator( getResourceFile( getClass(), "Files"));
     
     // When...
     List<String> names = fileNames( Iterators.toList( iterator));
@@ -54,7 +54,7 @@ public class FlatMapIteratorTest
   public void whenAcceptSome()
     {
     // Given...
-    FlatMapIterator<File,File> iterator = new SubdirectoryIterator( getResourceFile( "Files"), "Foxtrot");
+    FlatMapIterator<File,File> iterator = new SubdirectoryIterator( getResourceFile( getClass(), "Files"), "Foxtrot");
     
     // When...
     List<String> names = fileNames( Iterators.toList( iterator));
@@ -66,29 +66,6 @@ public class FlatMapIteratorTest
       contains(
         "Echo",
         "Juliett"));
-    }
-
-  private List<String> fileNames( Collection<File> files)
-    {
-    return
-      files
-      .stream()
-      .map( File::getName)
-      .sorted()
-      .collect( toList());
-    }
-
-  private File getResourceFile( String name)
-    {
-    try
-      {
-      URL resource = Optional.ofNullable( getClass().getResource( name)).orElseThrow( () -> new IllegalArgumentException( "Resource not found")); 
-      return new File( resource.toURI().getPath());
-      }
-    catch( Exception e)
-      {
-      throw new IllegalArgumentException( String.format( "Can't get resource file=%s", name), e);
-      }
     }  
 
   public static class FilesIterator extends FlatMapIterator<File,File>
