@@ -27,12 +27,23 @@ public final class Files
     }
 
   /**
-   * Returns all files found in the given directory and its descendants.
+   * Returns all (non-directory) files found in the given directory and its descendants.
    */
   public static Collection<File> allFiles( File dir)
     {
     return
       addMembers(
+        new ArrayList<File>(),
+        dir.isDirectory()? dir.listFiles() : new File[0]);
+    }
+
+  /**
+   * Returns all directories found in the given directory and its descendants.
+   */
+  public static Collection<File> allDirs( File dir)
+    {
+    return
+      addSubdirs(
         new ArrayList<File>(),
         dir.isDirectory()? dir.listFiles() : new File[0]);
     }
@@ -56,10 +67,30 @@ public final class Files
     {
     for( File member : members)
       {
-      files.add( member);
       if( member.isDirectory())
         {
         addMembers( files, member.listFiles());
+        }
+      else
+        {
+        files.add( member);
+        }
+      }
+    
+    return files;
+    }
+
+  /**
+   * For each subdirectory among the given directory members, adds the subdirectory and its descendant directories.
+   */
+  private static Collection<File> addSubdirs( Collection<File> files, File[] members)
+    {
+    for( File member : members)
+      {
+      if( member.isDirectory())
+        {
+        files.add( member);
+        addSubdirs( files, member.listFiles());
         }
       }
     

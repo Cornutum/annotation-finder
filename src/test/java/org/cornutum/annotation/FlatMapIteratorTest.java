@@ -72,15 +72,13 @@ public class FlatMapIteratorTest
     {
     public FilesIterator( File dir)
       {
-      super( append( Files.allFiles( dir), dir));
+      super( append( Files.allDirs( dir), dir));
       }
 
     protected Iterator<File> map( File element)
       {
-      File[] members = element.listFiles();
-      
       return
-        Arrays.stream( members == null? new File[0] : members)
+        Arrays.stream( element.listFiles())
         .filter( file -> !file.isDirectory())
         .collect( toList())
         .iterator();
@@ -94,26 +92,17 @@ public class FlatMapIteratorTest
       }
     }  
 
-  public static class SubdirectoryIterator extends FlatMapIterator<File,File>
+  public static class SubdirectoryIterator extends FilesIterator
     {
     public SubdirectoryIterator( File dir, String subDir)
       {
-      super( Files.allFiles( dir));
+      super( dir);
       subDir_ = subDir;
       }
 
     protected boolean accept( File element)
       {
-      return element.isDirectory() && element.getName().equals( subDir_);
-      }
-    
-    protected Iterator<File> map( File element)
-      {
-      return
-        Arrays.stream( element.listFiles())
-        .filter( file -> !file.isDirectory())
-        .collect( toList())
-        .iterator();
+      return element.getName().equals( subDir_);
       }
 
     private String subDir_;
