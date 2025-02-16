@@ -11,9 +11,7 @@ import java.io.File;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
@@ -22,7 +20,7 @@ import static org.cornutum.annotation.Iterators.*;
 /**
  * Finds class elements associated with specified annotations.
  */
-public class Finder implements AnnotationFilter
+public class Finder
   {
   /**
    * Creates a new Finder instance.
@@ -43,10 +41,10 @@ public class Finder implements AnnotationFilter
   /**
    * Adds an annotation to find.
    */
+  @SuppressWarnings("unchecked")
   public Finder annotation( Class<? extends Annotation> annotation)
     {
-    // Identify the annotation class by its raw type name.
-    annotations_.put( String.format( "L%s;", annotation.getName().replace( '.', '/')), annotation);
+    getFilter().annotation( annotation);
     return this;
     }
 
@@ -63,7 +61,7 @@ public class Finder implements AnnotationFilter
    */
   public Finder inPackage( Collection<String> packageNames)
     {
-    packages_.addAll( packageNames);
+    getFilter().inPackage( packageNames);
     return this;
     }
 
@@ -107,31 +105,17 @@ public class Finder implements AnnotationFilter
    */
   public Stream<Annotated> find()
     {
-    return toStream( new ClassPathAnnotated( classPath_, this));
+    return toStream( new ClassPathAnnotated( classPath_, getFilter()));
     }
 
   /**
-   * If the given class name identifies an accepted {@link Annotation}, returns the annotation class.
-   * Otherwise, returns empty.
+   * Returns the {@link AnnotationFilter} for this Finder.
    */
-  public Optional<Class<? extends Annotation>> acceptAnnotation( String className)
+  private SimpleAnnotationFilter getFilter()
     {
-    return Optional.ofNullable( annotations_.get( className));
+    return filter_;
     }
 
-  /**
-   * Returns true if the given package is an accepted package.
-   */
-  public boolean acceptPackage( String packageName)
-    {
-    return
-      Optional.of( packages_)
-      .filter( packages -> !packages.isEmpty())
-      .map( packages -> packages.contains( packageName))
-      .orElse( true);
-    }
-  
-  private LinkedHashMap<String,Class<? extends Annotation>> annotations_;
-  private Set<String> packages_ = new LinkedHashSet<String>();
+  private SimpleAnnotationFilter filter_ = new SimpleAnnotationFilter();
   private Set<File> classPath_ = new LinkedHashSet<File>();
   }
