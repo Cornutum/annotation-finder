@@ -8,6 +8,8 @@
 package org.cornutum.annotation;
 
 import java.lang.annotation.Annotation;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Defines a method that references a specified annotation.
@@ -17,9 +19,9 @@ public class AnnotatedMethod extends Annotated
   /**
    * Creates a new AnnotatedMethod instance.
    */
-  protected AnnotatedMethod( Class<? extends Annotation> annotation, String className, String method)
+  protected AnnotatedMethod( Class<? extends Annotation> annotation, String className, String method, boolean isRuntime)
     {
-    super( annotation, className);
+    super( annotation, className, isRuntime);
     method_ = method;
     }
 
@@ -37,6 +39,31 @@ public class AnnotatedMethod extends Annotated
   public String getMethod()
     {
     return method_;
+    }
+
+  public int hashCode()
+    {
+    return
+      Objects.hashCode( getClass())
+      ^ Objects.hashCode( getAnnotation())
+      ^ Objects.hashCode( getClassName())
+      ^ Objects.hashCode( getMethod())
+      ^ Objects.hashCode( isRuntime())
+      ;
+    }
+
+  public boolean equals( Object object)
+    {
+    return
+      Optional.ofNullable( object)
+      .filter( other -> getClass().equals( other.getClass()))
+      .map( other -> (AnnotatedMethod) other)
+      .map( other ->
+            Objects.equals( other.getAnnotation(), getAnnotation())
+            && Objects.equals( other.getClassName(), getClassName())
+            && Objects.equals( other.getMethod(), getMethod())
+            && Objects.equals( other.isRuntime(), isRuntime()))
+      .orElse( false);
     }
 
   private String method_;

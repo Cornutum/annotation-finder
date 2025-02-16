@@ -43,10 +43,11 @@ public abstract class Annotated
   /**
    * Creates a new Annotated instance.
    */
-  protected Annotated( Class<? extends Annotation> annotation, String className)
+  protected Annotated( Class<? extends Annotation> annotation, String className, boolean isRuntime)
     {
     annotation_ = annotation;
     className_ = className;
+    runtime_ = isRuntime;
     }
 
   /**
@@ -70,6 +71,15 @@ public abstract class Annotated
     return className_;
     }
 
-  private Class<? extends Annotation> annotation_;
-  private String className_;
+  /**
+   * Returns if this annotation is available at runtime.
+   */
+  public boolean isRuntime()
+    {
+    return runtime_;
+    }
+  
+  private final Class<? extends Annotation> annotation_;
+  private final String className_;
+  private final boolean runtime_;
   }
