@@ -35,22 +35,25 @@ public abstract class ClassData
   public Iterator<Annotated> getAnnotated( AnnotationFilter filter)
     {
     setFilter( filter);
+    annotated_.clear();
     
     try( DataInputStream data = new DataInputStream( new BufferedInputStream( getInputStream(), 16384)))
       {
       // Is this really a Java class file?
       if( data.readInt() == 0xCAFEBABE)
         {
-        // Yes, read contents to locate annotated elements.
+        // Yes, read contents to find annotated elements.
         readVersion( data);
         setConstants( readConstantPoolEntries( data));
         readAccessFlags( data);
-        getContext().setClassName( readThisClass( data));
-        readSuperClass( data);
-        readInterfaces( data);
-        readFields( data);
-        readMethods( data);
-        forType( Annotated.Type.CLASS, null, () -> readAttributes( data));
+
+        // Does this class belong to an accepted package?
+        Optional.of( readThisClass( data))
+          .filter( className -> getFilter().acceptPackage( classPackage( className)))
+          .ifPresent( className -> {
+            // Yes, find annotated elements.
+            findAnnotations( data, className);
+            });
         }
 
       return annotated_.iterator();
@@ -70,10 +73,35 @@ public abstract class ClassData
     }
 
   /**
+   * Returns the name of the package for the given class.
+   */
+  public static String classPackage( String className)
+    {
+    return className.substring( 0, className.lastIndexOf( '.'));
+    }
+
+  /**
    * Returns the class data input stream.
    */
   protected abstract InputStream getInputStream();
 
+  private void findAnnotations( DataInput data, String className)
+    {
+    try
+      {
+      getContext().setClassName( className);
+      readSuperClass( data);
+      readInterfaces( data);
+      readFields( data);
+      readMethods( data);
+      forType( Annotated.Type.CLASS, null, () -> readAttributes( data));
+      }
+    catch( Exception e)
+      {
+      throw new IllegalStateException( String.format( "Can't find annotations for class=%s", className), e);
+      }
+    }
+  
   private void readVersion( DataInput data) throws IOException
     {
     // sequence: minor version, major version (argument_index is 1-based)
@@ -380,17 +408,12 @@ public abstract class ClassData
     getFilter().acceptAnnotation( rawTypeName)
       .ifPresent( annotation -> {
 
+        // Yes, return this reference
         AnnotationContext context = getContext();
         context.setAnnotation( annotation);
+        annotated_.add( context.getAnnotated());
 
-        // Appears in a class belonging an accepted package?
-        if( getFilter().acceptPackage( context.getPackage()))
-          {
-          // Yes, return this reference
-          annotated_.add( context.getAnnotated());
-
-          context.setAnnotation( null);
-          }
+        context.setAnnotation( null);
         });
     }
 
@@ -483,17 +506,6 @@ public abstract class ClassData
     public String getClassName()
       {
       return className_;
-      }
-
-    /**
-     * Returns the name of the annotated class package.
-     */
-    public String getPackage()
-      {
-      return
-        Optional.ofNullable( getClassName())
-        .map( className -> className.substring( 0, className.lastIndexOf( '.')))
-        .orElse( null);
       }
     
     /**
