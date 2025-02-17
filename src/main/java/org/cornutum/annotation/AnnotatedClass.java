@@ -54,4 +54,14 @@ public class AnnotatedClass extends Annotated
             && Objects.equals( other.isRuntime(), isRuntime()))
       .orElse( false);
     }
+
+  public String toString()
+    {
+    return
+      ToString.of( this)
+      .append( Optional.ofNullable( getAnnotation()).map( Class::getSimpleName).orElse( "?"))
+      .append( "class", getClassName())
+      .append( "runtime", isRuntime())
+      .toString();
+    }
   }

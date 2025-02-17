@@ -66,5 +66,16 @@ public class AnnotatedField extends Annotated
       .orElse( false);
     }
 
+  public String toString()
+    {
+    return
+      ToString.of( this)
+      .append( Optional.ofNullable( getAnnotation()).map( Class::getSimpleName).orElse( "?"))
+      .append( "class", getClassName())
+      .append( "field", getField())
+      .append( "runtime", isRuntime())
+      .toString();
+    }
+
   private String field_;
   }

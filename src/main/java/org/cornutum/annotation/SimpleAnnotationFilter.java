@@ -15,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Simple base class for {@link AnnotationFilter} implementations.
@@ -87,6 +88,15 @@ public class SimpleAnnotationFilter implements AnnotationFilter
       .filter( packages -> !packages.isEmpty())
       .map( packages -> packages.contains( packageName))
       .orElse( true);
+    }
+
+  public String toString()
+    {
+    return
+      ToString.of( this)
+      .append( "annotations", annotations_.values().stream().map( Class::getSimpleName).collect( toList()))
+      .append( "packages", packages_)
+      .toString();
     }
 
   private Map<String,Class<? extends Annotation>> annotations_ = new LinkedHashMap<String,Class<? extends Annotation>>();

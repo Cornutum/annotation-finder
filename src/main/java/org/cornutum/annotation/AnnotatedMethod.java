@@ -66,5 +66,16 @@ public class AnnotatedMethod extends Annotated
       .orElse( false);
     }
 
+  public String toString()
+    {
+    return
+      ToString.of( this)
+      .append( Optional.ofNullable( getAnnotation()).map( Class::getSimpleName).orElse( "?"))
+      .append( "class", getClassName())
+      .append( "method", getMethod())
+      .append( "runtime", isRuntime())
+      .toString();
+    }
+
   private String method_;
   }

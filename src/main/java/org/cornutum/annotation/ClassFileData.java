@@ -39,5 +39,13 @@ public class ClassFileData extends ClassData
       }
     }
 
+  public String toString()
+    {
+    return
+      ToString.of( this)
+      .append( file_)
+      .toString();
+    }
+
   private File file_;
   }

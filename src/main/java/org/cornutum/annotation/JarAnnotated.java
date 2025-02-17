@@ -26,7 +26,16 @@ public class JarAnnotated extends FlatMapIterator<Annotated, JarEntryReader>
   public JarAnnotated( File jar, AnnotationFilter filter)
     {
     super( entryReaders( jar));
+    jar_ = jar;
     filter_ = filter;
+    }
+
+  /**
+   * Returns the JAR file for this iterator.
+   */
+  public File getJar()
+    {
+    return jar_;
     }
 
   /**
@@ -74,5 +83,14 @@ public class JarAnnotated extends FlatMapIterator<Annotated, JarEntryReader>
       }
     }
 
-  private AnnotationFilter filter_;
+  public String toString()
+    {
+    return
+      ToString.of( this)
+      .append( getJar().getName())
+      .toString();
+    }
+
+  private final File jar_;
+  private final AnnotationFilter filter_;
   }

@@ -21,7 +21,16 @@ public class DirectoryAnnotated extends FlatMapIterator<Annotated,File>
   public DirectoryAnnotated( File dir, AnnotationFilter filter)
     {
     super( Files.classFiles( dir));
+    dir_ = dir;
     filter_ = filter;
+    }
+
+  /**
+   * Returns the directory for this iterator.
+   */
+  public File getDir()
+    {
+    return dir_;
     }
 
   /**
@@ -32,5 +41,14 @@ public class DirectoryAnnotated extends FlatMapIterator<Annotated,File>
     return new ClassFileData( file).getAnnotated( filter_);
     }
 
-  private AnnotationFilter filter_;
+  public String toString()
+    {
+    return
+      ToString.of( this)
+      .append( getDir())
+      .toString();
+    }
+
+  private final File dir_;
+  private final AnnotationFilter filter_;
   }

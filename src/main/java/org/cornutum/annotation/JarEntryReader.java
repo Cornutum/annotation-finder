@@ -7,6 +7,7 @@
 
 package org.cornutum.annotation;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -56,6 +57,23 @@ public class JarEntryReader
       }
     }
 
+  /**
+   * Returns the simple name of the JAR file for this entry.
+   */
+  private String getJarName()
+    {
+    return new File( getFile().getName()).getName();
+    }
+
+  public String toString()
+    {
+    return
+      ToString.of( this)
+      .append( "jar", getJarName())
+      .append( "entry", getEntry().getName())
+      .toString();
+    }
+  
   private JarFile file_;
   private JarEntry entry_;
   }

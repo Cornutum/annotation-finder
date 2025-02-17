@@ -30,5 +30,13 @@ public class ClassEntryData extends ClassData
     return reader_.getInputStream();
     }
 
+  public String toString()
+    {
+    return
+      ToString.of( this)
+      .append( reader_)
+      .toString();
+    }
+
   private JarEntryReader reader_;
   }
