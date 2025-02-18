@@ -513,7 +513,7 @@ public abstract class ClassData
   private static class AnnotationContext
     {
     /**
-     * Changes the annotation type for this annotation.
+     * Changes the annotation class name for this annotation.
      */
     public void setAnnotation( String annotation)
       {
@@ -521,7 +521,7 @@ public abstract class ClassData
       }
 
     /**
-     * Returns the annotation type for this annotation.
+     * Returns the annotation class name for this annotation.
      */
     public String getAnnotation()
       {
@@ -545,7 +545,7 @@ public abstract class ClassData
       }
     
     /**
-     * Changes the type of the current annotation.
+     * Changes the type of the annotated element.
      */
     public void setType( Annotated.Type type)
       {
@@ -553,7 +553,7 @@ public abstract class ClassData
       }
 
     /**
-     * Returns the type of the current annotation.
+     * Returns the type of the annotated element.
      */
     public Annotated.Type getType()
       {
@@ -599,11 +599,11 @@ public abstract class ClassData
       {
       String annotation =
         Optional.ofNullable( getAnnotation())
-        .orElseThrow( () -> new IllegalStateException( "Annotation type undefined for this annotation"));
+        .orElseThrow( () -> new IllegalStateException( "Annotation type undefined for this annotated element"));
       
       String className =
         Optional.ofNullable( getClassName())
-        .orElseThrow( () -> new IllegalStateException( "Class undefined for this annotation"));
+        .orElseThrow( () -> new IllegalStateException( "Class undefined for this annotated element"));
 
       boolean isRuntime =
         Optional.ofNullable( isRuntime())
@@ -623,7 +623,7 @@ public abstract class ClassData
             new AnnotatedMethod(
               annotation,
               className,
-              Optional.ofNullable( getElement()).orElseThrow( () -> new IllegalStateException( "Method undefined for this annotation")),
+              Optional.ofNullable( getElement()).orElseThrow( () -> new IllegalStateException( "Method undefined for this annotated element")),
               isRuntime);
           break;
           }
@@ -633,7 +633,7 @@ public abstract class ClassData
             new AnnotatedField(
               annotation,
               className,
-              Optional.ofNullable( getElement()).orElseThrow( () -> new IllegalStateException( "Field undefined for this annotation")),
+              Optional.ofNullable( getElement()).orElseThrow( () -> new IllegalStateException( "Field undefined for this annotated element")),
               isRuntime);
           break;
           }

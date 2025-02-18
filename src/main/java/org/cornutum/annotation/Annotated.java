@@ -54,7 +54,7 @@ public abstract class Annotated
   public abstract Type getType();
 
   /**
-   * Returns the annotation referenced.
+   * Returns class name of the annotation referenced.
    */
   public String getAnnotation()
     {
