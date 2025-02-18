@@ -594,7 +594,7 @@ public abstract class ClassData
         case FIELD:
           {
           annotated =
-            new AnnotatedMethod(
+            new AnnotatedField(
               annotation,
               className,
               Optional.ofNullable( getElement()).orElseThrow( () -> new IllegalStateException( "Field undefined for this annotation")),
@@ -604,6 +604,18 @@ public abstract class ClassData
         }
       
       return annotated;
+      }
+
+    public String toString()
+      {
+      return
+        ToString.of( this)
+        .append( "annotation", Optional.ofNullable( getAnnotation()).map( Class::getSimpleName).orElse( null))
+        .append( "class", getClassName())
+        .append( "type", getType())
+        .append( "element", getElement())
+        .append( "runtime", isRuntime())
+        .toString();
       }
 
     private Class<? extends Annotation> annotation_;
