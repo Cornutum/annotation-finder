@@ -356,7 +356,7 @@ public abstract class ClassData
    */
   private void setFilter( AnnotationFilter filter)
     {
-    filter_ = filter;
+    filter_ = Optional.ofNullable( filter).orElse( ACCEPT_ALL);
     }
 
   /**
@@ -492,6 +492,20 @@ public abstract class ClassData
   private AnnotationFilter filter_;
 
   private static final Pattern RAW_TYPE_NAME_PATTERN = Pattern.compile( "L([\\w/]+);");
+
+  private static final AnnotationFilter ACCEPT_ALL =
+    new AnnotationFilter()
+      {
+      public Optional<String> acceptAnnotation( String rawTypeName)
+        {
+        return Optional.of( toClassName( rawTypeName));
+        }
+
+      public boolean acceptPackage( String packageName)
+        {
+        return true;
+        }
+      };
   
   /**
    * Represents the current context for recognizing annotations in this class.
