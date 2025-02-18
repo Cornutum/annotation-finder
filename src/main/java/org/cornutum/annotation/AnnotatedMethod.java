@@ -19,10 +19,18 @@ public class AnnotatedMethod extends Annotated
   /**
    * Creates a new AnnotatedMethod instance.
    */
-  protected AnnotatedMethod( Class<? extends Annotation> annotation, String className, String method, boolean isRuntime)
+  protected AnnotatedMethod( String annotation, String className, String method, boolean isRuntime)
     {
     super( annotation, className, isRuntime);
     method_ = method;
+    }
+  
+  /**
+   * Creates a new AnnotatedMethod instance.
+   */
+  protected AnnotatedMethod( Class<? extends Annotation> annotation, String className, String method, boolean isRuntime)
+    {
+    this( Optional.ofNullable( annotation).map( Class::getName).orElse( null), className, method, isRuntime);
     }
 
   /**
@@ -70,7 +78,7 @@ public class AnnotatedMethod extends Annotated
     {
     return
       ToString.of( this)
-      .append( Optional.ofNullable( getAnnotation()).map( Class::getSimpleName).orElse( "?"))
+      .append( ToString.simpleClassName( getAnnotation()))
       .append( "class", getClassName())
       .append( "method", getMethod())
       .append( "runtime", isRuntime())

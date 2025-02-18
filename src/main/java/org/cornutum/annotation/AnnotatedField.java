@@ -19,10 +19,18 @@ public class AnnotatedField extends Annotated
   /**
    * Creates a new AnnotatedField instance.
    */
-  protected AnnotatedField( Class<? extends Annotation> annotation, String className, String field, boolean isRuntime)
+  protected AnnotatedField( String annotation, String className, String field, boolean isRuntime)
     {
     super( annotation, className, isRuntime);
     field_ = field;
+    }
+  
+  /**
+   * Creates a new AnnotatedField instance.
+   */
+  protected AnnotatedField( Class<? extends Annotation> annotation, String className, String field, boolean isRuntime)
+    {
+    this( Optional.ofNullable( annotation).map( Class::getName).orElse( null), className, field, isRuntime);
     }
 
   /**
@@ -70,7 +78,7 @@ public class AnnotatedField extends Annotated
     {
     return
       ToString.of( this)
-      .append( Optional.ofNullable( getAnnotation()).map( Class::getSimpleName).orElse( "?"))
+      .append( ToString.simpleClassName( getAnnotation()))
       .append( "class", getClassName())
       .append( "field", getField())
       .append( "runtime", isRuntime())

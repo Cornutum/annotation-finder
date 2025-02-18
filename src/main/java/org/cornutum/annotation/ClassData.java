@@ -14,11 +14,11 @@ import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern; 
 
 /**
  * An interface to the data for a class definition.
@@ -65,11 +65,31 @@ public abstract class ClassData
     }
 
   /**
-   * Returns the raw type name recorded for the given type in a class file.
+   * Returns the raw type name recorded for the given class type in a class file.
    */
   public static String rawTypeName( Class<?> type)
     {
-    return String.format( "L%s;", type.getName().replace( '.', '/'));
+    return rawTypeName( type.getName());
+    }
+
+  /**
+   * Returns the raw type name recorded for the given class name in a class file.
+   */
+  public static String rawTypeName( String className)
+    {
+    return String.format( "L%s;", className.replace( '.', '/'));
+    }
+
+  /**
+   * Converts the given raw type name to a fully-qualified class name.
+   */
+  public static String toClassName( String rawTypeName)
+    {
+    return
+      Optional.of( RAW_TYPE_NAME_PATTERN.matcher( Optional.ofNullable( rawTypeName).orElse( "null")))
+      .filter( m -> m.matches())
+      .map( m -> m.group(1).replace( '/', '.'))
+      .orElseThrow( () -> new IllegalArgumentException( String.format( "'%s' is not a valid raw type name'", rawTypeName)));
     }
 
   /**
@@ -471,6 +491,8 @@ public abstract class ClassData
   private List<Annotated> annotated_ = new ArrayList<Annotated>();
   private AnnotationFilter filter_;
 
+  private static final Pattern RAW_TYPE_NAME_PATTERN = Pattern.compile( "L([\\w/]+);");
+  
   /**
    * Represents the current context for recognizing annotations in this class.
    */
@@ -479,7 +501,7 @@ public abstract class ClassData
     /**
      * Changes the annotation type for this annotation.
      */
-    public void setAnnotation( Class<? extends Annotation> annotation)
+    public void setAnnotation( String annotation)
       {
       annotation_ = annotation;
       }
@@ -487,7 +509,7 @@ public abstract class ClassData
     /**
      * Returns the annotation type for this annotation.
      */
-    public Class<? extends Annotation> getAnnotation()
+    public String getAnnotation()
       {
       return annotation_;
       }
@@ -561,7 +583,7 @@ public abstract class ClassData
      */
     public Annotated getAnnotated()
       {
-      Class<? extends Annotation> annotation =
+      String annotation =
         Optional.ofNullable( getAnnotation())
         .orElseThrow( () -> new IllegalStateException( "Annotation type undefined for this annotation"));
       
@@ -610,7 +632,7 @@ public abstract class ClassData
       {
       return
         ToString.of( this)
-        .append( "annotation", Optional.ofNullable( getAnnotation()).map( Class::getSimpleName).orElse( null))
+        .append( "annotation", ToString.simpleClassName( getAnnotation()))
         .append( "class", getClassName())
         .append( "type", getType())
         .append( "element", getElement())
@@ -618,7 +640,7 @@ public abstract class ClassData
         .toString();
       }
 
-    private Class<? extends Annotation> annotation_;
+    private String annotation_;
     private Annotated.Type type_;
     private String className_;
     private String elementName_;

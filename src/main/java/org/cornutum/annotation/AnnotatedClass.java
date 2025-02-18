@@ -19,9 +19,17 @@ public class AnnotatedClass extends Annotated
   /**
    * Creates a new AnnotatedClass instance.
    */
-  protected AnnotatedClass( Class<? extends Annotation> annotation, String className, boolean isRuntime)
+  protected AnnotatedClass( String annotation, String className, boolean isRuntime)
     {
     super( annotation, className, isRuntime);
+    }
+  
+  /**
+   * Creates a new AnnotatedClass instance.
+   */
+  protected AnnotatedClass( Class<? extends Annotation> annotation, String className, boolean isRuntime)
+    {
+    this( Optional.ofNullable( annotation).map( Class::getName).orElse( null), className, isRuntime);
     }
 
   /**
@@ -59,7 +67,7 @@ public class AnnotatedClass extends Annotated
     {
     return
       ToString.of( this)
-      .append( Optional.ofNullable( getAnnotation()).map( Class::getSimpleName).orElse( "?"))
+      .append( ToString.simpleClassName( getAnnotation()))
       .append( "class", getClassName())
       .append( "runtime", isRuntime())
       .toString();

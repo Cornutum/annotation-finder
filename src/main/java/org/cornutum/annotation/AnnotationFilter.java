@@ -16,10 +16,10 @@ import java.util.Optional;
 public interface AnnotationFilter
   {
   /**
-   * If the given raw type name identifies an accepted {@link Annotation}, returns the annotation class.
+   * If the given raw type name identifies an accepted {@link Annotation}, returns the annotation class name.
    * Otherwise, returns empty.
    */
-  Optional<Class<? extends Annotation>> acceptAnnotation( String rawTypeName);
+  Optional<String> acceptAnnotation( String rawTypeName);
 
   /**
    * Returns true if the package belongs to an accepted package.

@@ -39,12 +39,32 @@ public class SimpleAnnotationFilter implements AnnotationFilter
     }
 
   /**
+   * Creates a new SimpleAnnotationFilter instance.
+   */
+  public SimpleAnnotationFilter( String... annotations)
+    {
+    annotation( annotations);
+    }
+
+  /**
    * Adds to the set of accepted annotations.
    */
   @SuppressWarnings("unchecked")
   public SimpleAnnotationFilter annotation( Class<? extends Annotation>... annotations)
     {
-    for( Class<? extends Annotation> annotation : annotations)
+    return
+      annotation(
+        Arrays.stream( annotations)
+        .map( Class::getName)
+        .toArray( String[]::new));
+    }
+
+  /**
+   * Adds to the set of accepted annotations.
+   */
+  public SimpleAnnotationFilter annotation( String... annotations)
+    {
+    for( String annotation : annotations)
       {
       annotations_.put( ClassData.rawTypeName( annotation), annotation);
       }
@@ -73,7 +93,7 @@ public class SimpleAnnotationFilter implements AnnotationFilter
    * If the given raw type name identifies an accepted {@link Annotation}, returns the annotation class.
    * Otherwise, returns empty.
    */
-  public Optional<Class<? extends Annotation>> acceptAnnotation( String rawTypeName)
+  public Optional<String> acceptAnnotation( String rawTypeName)
     {
     return Optional.ofNullable( annotations_.get( rawTypeName));
     }
@@ -94,11 +114,11 @@ public class SimpleAnnotationFilter implements AnnotationFilter
     {
     return
       ToString.of( this)
-      .append( "annotations", annotations_.values().stream().map( Class::getSimpleName).collect( toList()))
+      .append( "annotations", annotations_.values().stream().map( ToString::simpleClassName).collect( toList()))
       .append( "packages", packages_)
       .toString();
     }
 
-  private Map<String,Class<? extends Annotation>> annotations_ = new LinkedHashMap<String,Class<? extends Annotation>>();
+  private Map<String,String> annotations_ = new LinkedHashMap<String,String>();
   private Set<String> packages_ = new HashSet<String>();
   }

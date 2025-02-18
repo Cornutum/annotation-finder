@@ -7,8 +7,6 @@
 
 package org.cornutum.annotation;
 
-import java.lang.annotation.Annotation;
-
 /**
  * Defines a class element that references a specified annotation.
  */
@@ -43,7 +41,7 @@ public abstract class Annotated
   /**
    * Creates a new Annotated instance.
    */
-  protected Annotated( Class<? extends Annotation> annotation, String className, boolean isRuntime)
+  protected Annotated( String annotation, String className, boolean isRuntime)
     {
     annotation_ = annotation;
     className_ = className;
@@ -56,9 +54,9 @@ public abstract class Annotated
   public abstract Type getType();
 
   /**
-   * Returns the annotation refer
+   * Returns the annotation referenced.
    */
-  public Class<? extends Annotation> getAnnotation()
+  public String getAnnotation()
     {
     return annotation_;
     }
@@ -79,7 +77,7 @@ public abstract class Annotated
     return runtime_;
     }
   
-  private final Class<? extends Annotation> annotation_;
+  private final String annotation_;
   private final String className_;
   private final boolean runtime_;
   }

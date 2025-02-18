@@ -7,6 +7,8 @@
 
 package org.cornutum.annotation;
 
+import java.util.Optional;
+
 /**
  * A standard <CODE>toString()</CODE> builder.
  */
@@ -67,6 +69,17 @@ public class ToString
   public String toString()
     {
     return String.format( "%s[%s]", object_.getClass().getSimpleName(), builder_.toString());
+    }
+
+  /**
+   * Returns the simple name of the given class.
+   */
+  public static String simpleClassName( String className)
+    {
+    return
+      Optional.ofNullable( className)
+      .map( name -> name.substring( name.lastIndexOf( '.') + 1))
+      .orElse( null);
     }
 
   final private Object object_;
