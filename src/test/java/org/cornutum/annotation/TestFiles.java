@@ -48,6 +48,26 @@ public final class TestFiles
       }
     }
   
+  public static File getTargetDir( Class<?> testClass)
+    {
+    try
+      {
+      URL resource = Optional.ofNullable( testClass.getResource( ".")).orElseThrow( () -> new IllegalArgumentException( "Resource not found")); 
+      File testClassDir = new File( resource.toURI().getPath());
+
+      File targetDir;
+      for( targetDir = testClassDir;
+           targetDir != null && !targetDir.getName().equals( "target");
+           targetDir = targetDir.getParentFile());
+
+      return targetDir;
+      }
+    catch( Exception e)
+      {
+      throw new IllegalArgumentException( String.format( "Can't get target directory containing class=%s", testClass.getSimpleName()), e);
+      }
+    }
+  
   public static File getClassPathJar( String packageName)
     {
     try
