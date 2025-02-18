@@ -8,7 +8,6 @@
 package org.cornutum.annotation;
 
 import java.io.File;
-import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -27,42 +26,15 @@ public class Finder
    */
   public Finder()
     {
+    this( null);
     }
   
   /**
    * Creates a new Finder instance.
    */
-  public Finder( Class<? extends Annotation> annotation)
+  public Finder( AnnotationFilter filter)
     {
-    this();
-    annotation( annotation);
-    }
-
-  /**
-   * Adds an annotation to find.
-   */
-  @SuppressWarnings("unchecked")
-  public Finder annotation( Class<? extends Annotation> annotation)
-    {
-    getFilter().annotation( annotation);
-    return this;
-    }
-
-  /**
-   * Find annotated classes that belong to one of the given packages
-   */
-  public Finder inPackage( String... packageNames)
-    {
-    return inPackage( Arrays.asList( packageNames));
-    }
-
-  /**
-   * Find annotated classes that belong to one of the given packages
-   */
-  public Finder inPackage( Collection<String> packageNames)
-    {
-    getFilter().inPackage( packageNames);
-    return this;
+    filter( filter == null? new SimpleAnnotationFilter() : filter);
     }
 
   /**
@@ -75,6 +47,16 @@ public class Finder
         Arrays.stream( System.getProperty( "java.class.path").split( System.getProperty( "path.separator")))
         .map( File::new)
         .collect( toList()));
+    }
+
+  /**
+   * Find annotated class references accepted by the given filter.
+   * If <CODE>filter</CODE> is null, accept all references.
+   */
+  public Finder filter( AnnotationFilter filter)
+    {
+    filter_ = filter;
+    return this;
     }
 
   /**
@@ -101,21 +83,13 @@ public class Finder
     }
 
   /**
-   * Returns annotated elements found on the current class path.
+   * Returns annotated elements found among the current class path elements.
    */
   public Stream<Annotated> find()
     {
-    return toStream( new ClassPathAnnotated( classPath_, getFilter()));
+    return toStream( new ClassPathAnnotated( classPath_, filter_));
     }
 
-  /**
-   * Returns the {@link AnnotationFilter} for this Finder.
-   */
-  private SimpleAnnotationFilter getFilter()
-    {
-    return filter_;
-    }
-
-  private SimpleAnnotationFilter filter_ = new SimpleAnnotationFilter();
+  private AnnotationFilter filter_;
   private Set<File> classPath_ = new LinkedHashSet<File>();
   }
