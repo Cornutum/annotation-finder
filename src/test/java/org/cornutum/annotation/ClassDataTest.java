@@ -31,7 +31,7 @@ public class ClassDataTest
     // Given...
     String classFile = String.format( "%s.class", getClass().getSimpleName());
     ClassData classData = new ClassFileData( getResourceFile( getClass(), classFile));
-    AnnotationFilter filter = new SimpleAnnotationFilter( FixMethodOrder.class, Test.class);
+    AnnotationFilter filter = new PackageFilter( FixMethodOrder.class, Test.class);
 
     // When..
     List<Annotated> annotated =

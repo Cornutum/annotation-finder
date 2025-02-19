@@ -18,14 +18,15 @@ import java.util.Set;
 import static java.util.stream.Collectors.toList;
 
 /**
- * Simple base class for {@link AnnotationFilter} implementations.
+ * An {@link AnnotationFilter} that accepts annotated elements appearing in classes
+ * that belong to specific packages.
  */
-public class SimpleAnnotationFilter implements AnnotationFilter
+public class PackageFilter implements AnnotationFilter
   {
   /**
    * Creates a new SimpleAnnotationFilter instance.
    */
-  public SimpleAnnotationFilter()
+  public PackageFilter()
     {
     }
 
@@ -33,7 +34,7 @@ public class SimpleAnnotationFilter implements AnnotationFilter
    * Creates a new SimpleAnnotationFilter instance.
    */
   @SafeVarargs
-  public SimpleAnnotationFilter( Class<? extends Annotation>... annotations)
+  public PackageFilter( Class<? extends Annotation>... annotations)
     {
     annotation( annotations);
     }
@@ -41,7 +42,7 @@ public class SimpleAnnotationFilter implements AnnotationFilter
   /**
    * Creates a new SimpleAnnotationFilter instance.
    */
-  public SimpleAnnotationFilter( String... annotations)
+  public PackageFilter( String... annotations)
     {
     annotation( annotations);
     }
@@ -50,7 +51,7 @@ public class SimpleAnnotationFilter implements AnnotationFilter
    * Adds to the set of accepted annotations.
    */
   @SuppressWarnings("unchecked")
-  public SimpleAnnotationFilter annotation( Class<? extends Annotation>... annotations)
+  public PackageFilter annotation( Class<? extends Annotation>... annotations)
     {
     return
       annotation(
@@ -62,7 +63,7 @@ public class SimpleAnnotationFilter implements AnnotationFilter
   /**
    * Adds to the set of accepted annotations.
    */
-  public SimpleAnnotationFilter annotation( String... annotations)
+  public PackageFilter annotation( String... annotations)
     {
     for( String annotation : annotations)
       {
@@ -75,7 +76,7 @@ public class SimpleAnnotationFilter implements AnnotationFilter
   /**
    * Adds to the set of accepted packages.
    */
-  public SimpleAnnotationFilter inPackage( String... packageNames)
+  public PackageFilter inPackage( String... packageNames)
     {
     return inPackage( Arrays.asList( packageNames));
     }
@@ -83,7 +84,7 @@ public class SimpleAnnotationFilter implements AnnotationFilter
   /**
    * Adds to the set of accepted packages.
    */
-  public SimpleAnnotationFilter inPackage( Collection<String> packageNames)
+  public PackageFilter inPackage( Collection<String> packageNames)
     {
     packages_.addAll( packageNames);
     return this;
@@ -99,7 +100,8 @@ public class SimpleAnnotationFilter implements AnnotationFilter
     }
 
   /**
-   * Returns true if the package belongs to an accepted package. 
+   * Returns true if the package belongs to an accepted package.
+   * If no accepted package has been defined, returns true for any <CODE>packageName</CODE>.
    */
   public boolean acceptPackage( String packageName)
     {

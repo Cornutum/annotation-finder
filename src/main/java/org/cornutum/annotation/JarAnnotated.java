@@ -16,12 +16,12 @@ import java.util.jar.JarFile;
 import static java.util.stream.Collectors.toList;
 
 /**
- * Returns selected {@link Annotated} instances from class files in the given JAR file.
+ * Returns selected {@link Annotated} instances from class files in a specified JAR file.
  */
 public class JarAnnotated extends FlatMapIterator<Annotated, JarEntryReader>
   {
   /**
-   * Creates a new DirAnnotated instance.
+   * Creates a new JarAnnotated instance.
    */
   public JarAnnotated( File jar, AnnotationFilter filter)
     {
@@ -47,7 +47,7 @@ public class JarAnnotated extends FlatMapIterator<Annotated, JarEntryReader>
     }
 
   /**
-   * Maps the given file to a sequence of {@link Annotated} instances.
+   * Maps a JAR entry to a sequence of {@link Annotated} instances.
    */
   protected Iterator<Annotated> map( JarEntryReader reader)
     {
@@ -63,7 +63,7 @@ public class JarAnnotated extends FlatMapIterator<Annotated, JarEntryReader>
     }
 
   /**
-   * Returns an {@link JarEntryReader} for each class file in the given JAR file
+   * Returns a {@link JarEntryReader} for each class file in the given JAR file.
    */
   private static Collection<JarEntryReader> entryReaders( File jar)
     {

@@ -25,7 +25,7 @@ public class ClassEntryData extends ClassData
   /**
    * Returns the class data input stream.
    */
-  protected InputStream getInputStream()
+  public InputStream getInputStream()
     {
     return reader_.getInputStream();
     }

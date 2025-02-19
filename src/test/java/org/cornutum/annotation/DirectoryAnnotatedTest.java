@@ -28,7 +28,7 @@ public class DirectoryAnnotatedTest
     {
     // Given...
     File dir = getTargetDir( getClass());
-    AnnotationFilter filter = new SimpleAnnotationFilter( Deprecated.class);
+    AnnotationFilter filter = new PackageFilter( Deprecated.class);
     DirectoryAnnotated iterator = new DirectoryAnnotated( dir, filter);
     
     // When...

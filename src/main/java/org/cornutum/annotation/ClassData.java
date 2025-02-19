@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 /**
  * An interface to the data for a class definition.
  * <P/>
- * This borrows heavily from the <A href="https://github.com/rmuller/infomas-asl">AnnotationDetector</A>
+ * This implementation is derived directly from the <A href="https://github.com/rmuller/infomas-asl">AnnotationDetector</A>
  * provided by <A href="https://www.linkedin.com/in/ronaldkmuller/">Ronald Muller</A> of XIAM Solutions B.V.
  * (see https://github.com/rmuller/infomas-asl).
  */
@@ -356,7 +356,7 @@ public abstract class ClassData
    */
   private void setFilter( AnnotationFilter filter)
     {
-    filter_ = Optional.ofNullable( filter).orElse( ACCEPT_ALL);
+    filter_ = Optional.ofNullable( filter).orElse( AllAnnotated.INSTANCE);
     }
 
   /**
@@ -492,20 +492,6 @@ public abstract class ClassData
   private AnnotationFilter filter_;
 
   private static final Pattern RAW_TYPE_NAME_PATTERN = Pattern.compile( "L([\\w/]+);");
-
-  private static final AnnotationFilter ACCEPT_ALL =
-    new AnnotationFilter()
-      {
-      public Optional<String> acceptAnnotation( String rawTypeName)
-        {
-        return Optional.of( toClassName( rawTypeName));
-        }
-
-      public boolean acceptPackage( String packageName)
-        {
-        return true;
-        }
-      };
   
   /**
    * Represents the current context for recognizing annotations in this class.

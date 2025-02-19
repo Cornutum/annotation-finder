@@ -28,7 +28,7 @@ public class JarAnnotatedTest
     {
     // Given...
     File jar = getClassPathJar( "org.hamcrest.collection");
-    AnnotationFilter filter = new SimpleAnnotationFilter( Deprecated.class).inPackage( "org.hamcrest.text");
+    AnnotationFilter filter = new PackageFilter( Deprecated.class).inPackage( "org.hamcrest.text");
     JarAnnotated iterator = new JarAnnotated( jar, filter);
     
     // When...

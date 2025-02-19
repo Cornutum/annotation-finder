@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
@@ -22,7 +23,7 @@ import static org.cornutum.annotation.Iterators.*;
 public class Finder
   {
   /**
-   * Creates a new Finder instance.
+   * Creates a new Finder instance using a {@link AllAnnotated default filter}.
    */
   public Finder()
     {
@@ -30,11 +31,11 @@ public class Finder
     }
   
   /**
-   * Creates a new Finder instance.
+   * Creates a new Finder instance using the specified {@link #filter filter}.
    */
   public Finder( AnnotationFilter filter)
     {
-    filter( filter == null? new SimpleAnnotationFilter() : filter);
+    filter( filter);
     }
 
   /**
@@ -50,12 +51,12 @@ public class Finder
     }
 
   /**
-   * Find annotated class references accepted by the given filter.
-   * If <CODE>filter</CODE> is null, accept all references.
+   * Find annotated class references accepted by the given {@link AnnotationFilter filter}.
+   * If <CODE>filter</CODE> is null, a {@link AllAnnotated default filter} is used.
    */
   public Finder filter( AnnotationFilter filter)
     {
-    filter_ = filter;
+    filter_ = Optional.ofNullable( filter).orElse( AllAnnotated.INSTANCE);
     return this;
     }
 

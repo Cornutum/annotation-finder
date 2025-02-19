@@ -11,7 +11,7 @@ import java.lang.annotation.Annotation;
 import java.util.Optional;
 
 /**
- * Defines criteria for finding an {@link Annotation}.
+ * Defines criteria for finding an annotated class element.
  */
 public interface AnnotationFilter
   {

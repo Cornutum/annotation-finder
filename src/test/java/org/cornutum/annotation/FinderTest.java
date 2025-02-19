@@ -29,7 +29,7 @@ public class FinderTest
     File dir = getTargetDir( getClass());
     File jar = getClassPathJar( "org.hamcrest.collection");
     File file = getResourceFile( getClass(), String.format( "%s.class", getClass().getSimpleName()));
-    Finder finder = new Finder().filter( new SimpleAnnotationFilter( Deprecated.class)).inClasses( dir, jar, file);
+    Finder finder = new Finder().filter( new PackageFilter( Deprecated.class)).inClasses( dir, jar, file);
 
     // When...
     List<Annotated> annotated = finder.find().collect( toList());

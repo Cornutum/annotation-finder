@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * Returns selected {@link Annotated} instances from a class path element.
+ * Returns selected {@link Annotated} instances from specified class path elements.
  */
 public class ClassPathAnnotated extends FlatMapIterator<Annotated,File>
   {

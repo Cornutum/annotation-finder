@@ -45,7 +45,7 @@ public class JarEntryReader
   /**
    * Returns the entry data input stream.
    */
-  protected InputStream getInputStream()
+  public InputStream getInputStream()
     {
     try
       {
