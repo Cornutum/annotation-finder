@@ -75,11 +75,7 @@ public class Finder
    */
   public Finder inClasses( Collection<File> classPath)
     {
-    for( File file : classPath)
-      {
-      classPath_.add( file);
-      }
-    
+    classPath_.addAll( classPath);
     return this;
     }
 
