@@ -7,6 +7,9 @@
 
 package org.cornutum.annotation;
 
+import static org.cornutum.annotation.ClassData.classPackage;
+import static org.cornutum.annotation.ClassData.rawTypeName;
+
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collection;
@@ -67,7 +70,7 @@ public class PackageFilter implements AnnotationFilter
     {
     for( String annotation : annotations)
       {
-      annotations_.put( ClassData.rawTypeName( annotation), annotation);
+      annotations_.put( rawTypeName( annotation), annotation);
       }
     
     return this;
@@ -100,16 +103,12 @@ public class PackageFilter implements AnnotationFilter
     }
 
   /**
-   * Returns true if the package belongs to an accepted package.
+   * Returns true if the given class belongs to an accepted package.
    * If no accepted package has been defined, returns true for any <CODE>packageName</CODE>.
    */
-  public boolean acceptPackage( String packageName)
+  public boolean acceptClass( String className)
     {
-    return
-      Optional.of( packages_)
-      .filter( packages -> !packages.isEmpty())
-      .map( packages -> packages.contains( packageName))
-      .orElse( true);
+    return packages_.isEmpty() || packages_.contains( classPackage( className));
     }
 
   public String toString()

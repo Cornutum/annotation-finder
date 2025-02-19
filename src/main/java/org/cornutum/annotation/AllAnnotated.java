@@ -19,7 +19,7 @@ public class AllAnnotated implements AnnotationFilter
     return Optional.of( ClassData.toClassName( rawTypeName));
     }
 
-  public boolean acceptPackage( String packageName)
+  public boolean acceptClass( String className)
     {
     return true;
     }

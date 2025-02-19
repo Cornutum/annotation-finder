@@ -49,7 +49,7 @@ public abstract class ClassData
 
         // Does this class belong to an accepted package?
         Optional.of( readThisClass( data))
-          .filter( className -> getFilter().acceptPackage( classPackage( className)))
+          .filter( className -> getFilter().acceptClass( className))
           .ifPresent( className -> {
             // Yes, find annotated elements.
             findAnnotations( data, className);

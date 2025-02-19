@@ -22,7 +22,7 @@ public interface AnnotationFilter
   Optional<String> acceptAnnotation( String rawTypeName);
 
   /**
-   * Returns true if the package belongs to an accepted package.
+   * Returns true if annotated elements of the given class are accepted.
    */
-  boolean acceptPackage( String packageName);
+  boolean acceptClass( String className);
   }

@@ -43,7 +43,7 @@ public class JarAnnotated extends FlatMapIterator<Annotated, JarEntryReader>
    */
   protected boolean accept( JarEntryReader reader)
     {
-    return filter_.acceptPackage( entryPackage( reader.getEntry().getName()));
+    return filter_.acceptClass( entryClass( reader.getEntry().getName()));
     }
 
   /**
@@ -55,11 +55,14 @@ public class JarAnnotated extends FlatMapIterator<Annotated, JarEntryReader>
     }
 
   /**
-   * Returns the package name for the given JAR class entry.
+   * Returns the class name for the given JAR class entry.
    */
-  private static String entryPackage( String classEntryName)
+  private static String entryClass( String classEntryName)
     {
-    return classEntryName.substring( 0, classEntryName.lastIndexOf( '/')).replace( '/', '.');
+    return
+      classEntryName
+      .substring( 0, classEntryName.lastIndexOf( ".class"))
+      .replace( '/', '.');
     }
 
   /**
