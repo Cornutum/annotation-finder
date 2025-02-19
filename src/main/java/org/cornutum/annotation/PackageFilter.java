@@ -18,7 +18,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import static java.util.Collections.unmodifiableSet;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * An {@link AnnotationFilter} that accepts annotated elements appearing in classes
@@ -53,8 +55,8 @@ public class PackageFilter implements AnnotationFilter
   /**
    * Adds to the set of accepted annotations.
    */
-  @SuppressWarnings("unchecked")
-  public PackageFilter annotation( Class<? extends Annotation>... annotations)
+  @SafeVarargs  
+  public final PackageFilter annotation( Class<? extends Annotation>... annotations)
     {
     return
       annotation(
@@ -94,6 +96,22 @@ public class PackageFilter implements AnnotationFilter
     }
 
   /**
+   * Returns the annotations accepted by this filter.
+   */
+  public Set<String> getAnnotations()
+    {
+    return unmodifiableSet( annotations_.values().stream().collect( toSet()));
+    }
+
+  /**
+   * Returns the packages accepted by this filter.
+   */
+  public Set<String> getPackages()
+    {
+    return unmodifiableSet( packages_);
+    }
+
+  /**
    * If the given raw type name identifies an accepted {@link Annotation}, returns the annotation class.
    * Otherwise, returns empty.
    */
@@ -115,8 +133,8 @@ public class PackageFilter implements AnnotationFilter
     {
     return
       ToString.of( this)
-      .append( "annotations", annotations_.values().stream().map( ToString::simpleClassName).collect( toList()))
-      .append( "packages", packages_)
+      .append( "annotations", getAnnotations().stream().map( ToString::simpleClassName).collect( toList()))
+      .append( "packages", getPackages())
       .toString();
     }
 
