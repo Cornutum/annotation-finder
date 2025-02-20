@@ -7,8 +7,8 @@
 
 package org.cornutum.annotation;
 
+import static org.cornutum.annotation.Files.*;
 import static org.cornutum.annotation.Iterators.*;
-import static org.cornutum.annotation.TestFiles.*;
 
 import org.junit.Test;
 import static org.hamcrest.MatcherAssert.*;
@@ -27,7 +27,7 @@ public class JarAnnotatedTest
   public void whenEntriesInPackage()
     {
     // Given...
-    File jar = getClassPathJar( "org.hamcrest.collection");
+    File jar = classPathFor( "org.hamcrest.collection").iterator().next();
     AnnotationFilter filter = new PackageFilter( Deprecated.class).inPackage( "org.hamcrest.text");
     JarAnnotated iterator = new JarAnnotated( jar, filter);
     

@@ -8,7 +8,6 @@
 package org.cornutum.annotation;
 
 import java.io.File;
-import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
@@ -65,61 +64,6 @@ public final class TestFiles
     catch( Exception e)
       {
       throw new IllegalArgumentException( String.format( "Can't get target directory containing class=%s", testClass.getSimpleName()), e);
-      }
-    }
-  
-  public static File getClassPathJar( String packageName)
-    {
-    try
-      {
-      String resourceName = String.format( "%s/", packageName.replace( '.', '/'));
-      
-      URL resource =
-        Optional.ofNullable( Thread.currentThread().getContextClassLoader().getResource( resourceName))
-        .orElseThrow( () -> new IllegalArgumentException( String.format( "Package=%s not found on class path", packageName)));
-
-      
-      return
-        Optional.of( resource)
-        .filter( url -> "jar".equals( url.getProtocol()))
-        .map( url -> jarFileUrl( url))
-        .filter( jarUrl -> "file".equals( jarUrl.getProtocol()))
-        .map( TestFiles::toFile)
-        .orElseThrow( () -> new IllegalArgumentException( String.format( "Package resource=%s is not a JAR file", resource)));
-      }
-    catch( Exception e)
-      {
-      throw new IllegalArgumentException( String.format( "Can't get JAR file containing package=%s", packageName), e);
-      }
-    }
-
-  /**
-   * Returns the file represented by the given URL:
-   */
-  public static File toFile( URL url)
-    {
-    try
-      {
-      return new File( url.toURI().getPath());
-      }
-    catch( Exception e)
-      {
-      throw new IllegalStateException( String.format( "Can't get file from url=%s", url), e);
-      }
-    }
-
-  /**
-   * Returns the JAR file represented by the given URL:
-   */
-  public static URL jarFileUrl( URL jar)
-    {
-    try
-      {
-      return ((JarURLConnection)jar.openConnection()).getJarFileURL();
-      }
-    catch( Exception e)
-      {
-      throw new IllegalStateException( String.format( "Can't get JAR file URL from url=%s", jar), e);
       }
     }
   }

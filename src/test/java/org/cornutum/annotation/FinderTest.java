@@ -7,6 +7,7 @@
 
 package org.cornutum.annotation;
 
+import static org.cornutum.annotation.Files.*;
 import static org.cornutum.annotation.TestFiles.*;
 
 import org.junit.Test;
@@ -27,7 +28,7 @@ public class FinderTest
     {
     // Given...
     File dir = getTargetDir( getClass());
-    File jar = getClassPathJar( "org.hamcrest.collection");
+    File jar = classPathFor( "org.hamcrest.collection").iterator().next();
     File file = getResourceFile( getClass(), String.format( "%s.class", getClass().getSimpleName()));
     Finder finder = new Finder().filter( new PackageFilter( Deprecated.class)).inClasses( dir, jar, file);
 

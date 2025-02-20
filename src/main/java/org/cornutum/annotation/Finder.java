@@ -39,7 +39,7 @@ public class Finder
     }
 
   /**
-   * Find annotated classes among one of the given class path elements specified when the JVM was started.
+   * Find annotated class elements among one of the given class path elements specified when the JVM was started.
    */
   public Finder inSystemClassPath()
     {
@@ -61,7 +61,7 @@ public class Finder
     }
 
   /**
-   * Find annotated classes among one of the given class path elements.
+   * Find annotated class elements among one of the given class path elements.
    * Each file must be a *.class file, a directory, or a JAR file.
    */
   public Finder inClasses( File... classPath)
@@ -70,7 +70,7 @@ public class Finder
     }
 
   /**
-   * Find annotated classes among one of the given class path elements.
+   * Find annotated class elements among one of the given class path elements.
    * Each file must be a *.class file, a directory, or a JAR file.  
    */
   public Finder inClasses( Collection<File> classPath)
