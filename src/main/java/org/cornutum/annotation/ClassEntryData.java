@@ -7,12 +7,13 @@
 
 package org.cornutum.annotation;
 
+import java.io.File;
 import java.io.InputStream;
 
 /**
  * Provides access to the data for a class definition in a JAR file entry.
  */
-public class ClassEntryData extends ClassData
+public class ClassEntryData extends AbstractClassFileData
   {
   /**
    * Creates a new ClassEntryReader instance.
@@ -20,6 +21,7 @@ public class ClassEntryData extends ClassData
   public ClassEntryData( JarEntryReader reader)
     {
     reader_ = reader;
+    file_ = new File( reader.getFile().getName());
     }
 
   /**
@@ -30,6 +32,14 @@ public class ClassEntryData extends ClassData
     return reader_.getInputStream();
     }
 
+  /**
+   * Returns the file containing the class definition.
+   */
+  protected File getFile()
+    {
+    return file_;
+    }
+
   public String toString()
     {
     return
@@ -38,5 +48,6 @@ public class ClassEntryData extends ClassData
       .toString();
     }
 
-  private JarEntryReader reader_;
+  private final JarEntryReader reader_;
+  private final File file_;
   }

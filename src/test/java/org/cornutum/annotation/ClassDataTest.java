@@ -16,6 +16,7 @@ import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.runners.MethodSorters.NAME_ASCENDING;
 
+import java.io.File;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
 
@@ -29,8 +30,9 @@ public class ClassDataTest
   public void whenClassFile()
     {
     // Given...
-    String classFile = String.format( "%s.class", getClass().getSimpleName());
-    ClassData classData = new ClassFileData( getResourceFile( getClass(), classFile));
+    String classFileName = String.format( "%s.class", getClass().getSimpleName());
+    File classFile = getResourceFile( getClass(), classFileName);
+    ClassData classData = new ClassFileData( classFile);
     AnnotationFilter filter = new PackageFilter( FixMethodOrder.class, Test.class);
 
     // When..
@@ -43,8 +45,8 @@ public class ClassDataTest
       "Annotated",
       annotated,
       contains(
-        new AnnotatedMethod( Test.class, getClass().getName(), "whenClassFile", true),
-        new AnnotatedClass( FixMethodOrder.class, getClass().getName(), true)));
+        new AnnotatedMethod( Test.class, getClass().getName(), "whenClassFile", true, classFile),
+        new AnnotatedClass( FixMethodOrder.class, getClass().getName(), true, classFile)));
     }
 
   @Deprecated

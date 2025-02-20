@@ -14,7 +14,7 @@ import java.io.InputStream;
 /**
  * Provides access to the data for a class definition in a file.
  */
-public class ClassFileData extends ClassData
+public class ClassFileData extends AbstractClassFileData
   {
   /**
    * Creates a new ClassFileData instance.
@@ -39,6 +39,14 @@ public class ClassFileData extends ClassData
       }
     }
 
+  /**
+   * Returns the file containing the class definition.
+   */
+  protected File getFile()
+    {
+    return file_;
+    }
+
   public String toString()
     {
     return
@@ -47,5 +55,5 @@ public class ClassFileData extends ClassData
       .toString();
     }
 
-  private File file_;
+  private final File file_;
   }

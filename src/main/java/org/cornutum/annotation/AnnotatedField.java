@@ -7,6 +7,7 @@
 
 package org.cornutum.annotation;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.util.Objects;
 import java.util.Optional;
@@ -19,18 +20,27 @@ public class AnnotatedField extends Annotated
   /**
    * Creates a new AnnotatedField instance.
    */
-  protected AnnotatedField( String annotation, String className, String field, boolean isRuntime)
+  public AnnotatedField( String annotation, String className, String field, boolean isRuntime)
     {
-    super( annotation, className, isRuntime);
+    this( annotation, className, field, isRuntime, null);
+    }
+
+  
+  /**
+   * Creates a new AnnotatedField instance.
+   */
+  public AnnotatedField( String annotation, String className, String field, boolean isRuntime, File file)
+    {
+    super( annotation, className, isRuntime, file);
     field_ = field;
     }
   
   /**
    * Creates a new AnnotatedField instance.
    */
-  protected AnnotatedField( Class<? extends Annotation> annotation, String className, String field, boolean isRuntime)
+  public AnnotatedField( Class<? extends Annotation> annotation, String className, String field, boolean isRuntime, File file)
     {
-    this( Optional.ofNullable( annotation).map( Class::getName).orElse( null), className, field, isRuntime);
+    this( Optional.ofNullable( annotation).map( Class::getName).orElse( null), className, field, isRuntime, file);
     }
 
   /**
@@ -52,26 +62,21 @@ public class AnnotatedField extends Annotated
   public int hashCode()
     {
     return
-      Objects.hashCode( getClass())
-      ^ Objects.hashCode( getAnnotation())
-      ^ Objects.hashCode( getClassName())
+      super.hashCode()
       ^ Objects.hashCode( getField())
-      ^ Objects.hashCode( isRuntime())
       ;
     }
 
   public boolean equals( Object object)
     {
+    AnnotatedField other = 
+      super.equals( object)
+      ? (AnnotatedField) object
+      : null;
+
     return
-      Optional.ofNullable( object)
-      .filter( other -> getClass().equals( other.getClass()))
-      .map( other -> (AnnotatedField) other)
-      .map( other ->
-            Objects.equals( other.getAnnotation(), getAnnotation())
-            && Objects.equals( other.getClassName(), getClassName())
-            && Objects.equals( other.getField(), getField())
-            && Objects.equals( other.isRuntime(), isRuntime()))
-      .orElse( false);
+      other != null
+      && Objects.equals( other.getField(), getField());
     }
 
   public String toString()
@@ -82,6 +87,7 @@ public class AnnotatedField extends Annotated
       .append( "class", getClassName())
       .append( "field", getField())
       .append( "runtime", isRuntime())
+      .append( "file", Optional.ofNullable( getFile()).map( File::getName).orElse( null))
       .toString();
     }
 

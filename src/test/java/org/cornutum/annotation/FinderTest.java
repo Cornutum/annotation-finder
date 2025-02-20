@@ -36,20 +36,23 @@ public class FinderTest
     List<Annotated> annotated = finder.find().collect( toList());
 
     // Then...
+    String classFileName = String.format( "%s.class", ClassDataTest.class.getSimpleName());
+    File classFile = getResourceFile( getClass(), classFileName);
+
     assertThat(
       "Annotated",
       annotated,
       contains(
-        new AnnotatedField( Deprecated.class, "org.cornutum.annotation.ClassDataTest", "stringField", true),
-        new AnnotatedClass( Deprecated.class, "org.hamcrest.core.IsCollectionContaining", true),
-        new AnnotatedClass( Deprecated.class, "org.hamcrest.collection.IsArrayContainingInAnyOrder", true),
-        new AnnotatedMethod( Deprecated.class, "org.hamcrest.collection.IsIn", "isIn", true),
-        new AnnotatedMethod( Deprecated.class, "org.hamcrest.collection.IsIn", "isIn", true),
-        new AnnotatedMethod( Deprecated.class, "org.hamcrest.collection.IsIn", "isOneOf", true),
-        new AnnotatedMethod( Deprecated.class, "org.hamcrest.BaseMatcher", "_dont_implement_Matcher___instead_extend_BaseMatcher_", true),
-        new AnnotatedMethod( Deprecated.class, "org.hamcrest.Matcher", "_dont_implement_Matcher___instead_extend_BaseMatcher_", true),
-        new AnnotatedMethod( Deprecated.class, "org.hamcrest.text.IsEmptyString", "isEmptyString", true),
-        new AnnotatedMethod( Deprecated.class, "org.hamcrest.text.IsEmptyString", "isEmptyOrNullString", true)
+        new AnnotatedField( Deprecated.class, "org.cornutum.annotation.ClassDataTest", "stringField", true, classFile),
+        new AnnotatedClass( Deprecated.class, "org.hamcrest.core.IsCollectionContaining", true, jar),
+        new AnnotatedClass( Deprecated.class, "org.hamcrest.collection.IsArrayContainingInAnyOrder", true, jar),
+        new AnnotatedMethod( Deprecated.class, "org.hamcrest.collection.IsIn", "isIn", true, jar),
+        new AnnotatedMethod( Deprecated.class, "org.hamcrest.collection.IsIn", "isIn", true, jar),
+        new AnnotatedMethod( Deprecated.class, "org.hamcrest.collection.IsIn", "isOneOf", true, jar),
+        new AnnotatedMethod( Deprecated.class, "org.hamcrest.BaseMatcher", "_dont_implement_Matcher___instead_extend_BaseMatcher_", true, jar),
+        new AnnotatedMethod( Deprecated.class, "org.hamcrest.Matcher", "_dont_implement_Matcher___instead_extend_BaseMatcher_", true, jar),
+        new AnnotatedMethod( Deprecated.class, "org.hamcrest.text.IsEmptyString", "isEmptyString", true, jar),
+        new AnnotatedMethod( Deprecated.class, "org.hamcrest.text.IsEmptyString", "isEmptyOrNullString", true, jar)
         ));
     }
   }

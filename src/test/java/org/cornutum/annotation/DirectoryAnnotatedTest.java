@@ -37,9 +37,12 @@ public class DirectoryAnnotatedTest
       .collect( toList());
     
     // Then...
+    String classFileName = String.format( "%s.class", ClassDataTest.class.getSimpleName());
+    File classFile = getResourceFile( getClass(), classFileName);
+
     assertThat(
       "Annotated",
       annotated,
-      contains( new AnnotatedField( Deprecated.class, "org.cornutum.annotation.ClassDataTest", "stringField", true)));
+      contains( new AnnotatedField( Deprecated.class, "org.cornutum.annotation.ClassDataTest", "stringField", true, classFile)));
     }
   }

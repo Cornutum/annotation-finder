@@ -7,6 +7,7 @@
 
 package org.cornutum.annotation;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
 import java.util.Objects;
 import java.util.Optional;
@@ -19,18 +20,26 @@ public class AnnotatedMethod extends Annotated
   /**
    * Creates a new AnnotatedMethod instance.
    */
-  protected AnnotatedMethod( String annotation, String className, String method, boolean isRuntime)
+  public AnnotatedMethod( String annotation, String className, String method, boolean isRuntime)
     {
-    super( annotation, className, isRuntime);
+    this( annotation, className, method, isRuntime, null);
+    }
+  
+  /**
+   * Creates a new AnnotatedMethod instance.
+   */
+  public AnnotatedMethod( String annotation, String className, String method, boolean isRuntime, File file)
+    {
+    super( annotation, className, isRuntime, file);
     method_ = method;
     }
   
   /**
    * Creates a new AnnotatedMethod instance.
    */
-  protected AnnotatedMethod( Class<? extends Annotation> annotation, String className, String method, boolean isRuntime)
+  public AnnotatedMethod( Class<? extends Annotation> annotation, String className, String method, boolean isRuntime, File file)
     {
-    this( Optional.ofNullable( annotation).map( Class::getName).orElse( null), className, method, isRuntime);
+    this( Optional.ofNullable( annotation).map( Class::getName).orElse( null), className, method, isRuntime, file);
     }
 
   /**
@@ -52,26 +61,21 @@ public class AnnotatedMethod extends Annotated
   public int hashCode()
     {
     return
-      Objects.hashCode( getClass())
-      ^ Objects.hashCode( getAnnotation())
-      ^ Objects.hashCode( getClassName())
+      super.hashCode()
       ^ Objects.hashCode( getMethod())
-      ^ Objects.hashCode( isRuntime())
       ;
     }
 
   public boolean equals( Object object)
     {
+    AnnotatedMethod other = 
+      super.equals( object)
+      ? (AnnotatedMethod) object
+      : null;
+
     return
-      Optional.ofNullable( object)
-      .filter( other -> getClass().equals( other.getClass()))
-      .map( other -> (AnnotatedMethod) other)
-      .map( other ->
-            Objects.equals( other.getAnnotation(), getAnnotation())
-            && Objects.equals( other.getClassName(), getClassName())
-            && Objects.equals( other.getMethod(), getMethod())
-            && Objects.equals( other.isRuntime(), isRuntime()))
-      .orElse( false);
+      other != null
+      && Objects.equals( other.getMethod(), getMethod());
     }
 
   public String toString()
@@ -82,6 +86,7 @@ public class AnnotatedMethod extends Annotated
       .append( "class", getClassName())
       .append( "method", getMethod())
       .append( "runtime", isRuntime())
+      .append( "file", Optional.ofNullable( getFile()).map( File::getName).orElse( null))
       .toString();
     }
 

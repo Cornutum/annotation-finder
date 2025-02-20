@@ -7,6 +7,10 @@
 
 package org.cornutum.annotation;
 
+import java.io.File;
+import java.util.Objects;
+import java.util.Optional;
+
 /**
  * Defines a class element that references a specified annotation.
  */
@@ -41,11 +45,12 @@ public abstract class Annotated
   /**
    * Creates a new Annotated instance.
    */
-  protected Annotated( String annotation, String className, boolean isRuntime)
+  protected Annotated( String annotation, String className, boolean isRuntime, File file)
     {
     annotation_ = annotation;
     className_ = className;
     runtime_ = isRuntime;
+    file_ = file;
     }
 
   /**
@@ -76,8 +81,50 @@ public abstract class Annotated
     {
     return runtime_;
     }
-  
+
+  /**
+   * Changes the file containing the annotated class.
+   */
+  void setFile( File file)
+    {
+    file_ = file;
+    }
+
+  /**
+   * Returns the file containing the annotated class.
+   */
+  public File getFile()
+    {
+    return file_;
+    }
+
+  public int hashCode()
+    {
+    return
+      Objects.hashCode( getClass())
+      ^ Objects.hashCode( getAnnotation())
+      ^ Objects.hashCode( getClassName())
+      ^ Objects.hashCode( isRuntime())
+      ^ Objects.hashCode( getFile())
+      ;
+    }
+
+  public boolean equals( Object object)
+    {
+    return
+      Optional.ofNullable( object)
+      .filter( other -> getClass().equals( other.getClass()))
+      .map( other -> (Annotated) other)
+      .map( other ->
+            Objects.equals( other.getAnnotation(), getAnnotation())
+            && Objects.equals( other.getClassName(), getClassName())
+            && Objects.equals( other.isRuntime(), isRuntime())
+            && Objects.equals( other.getFile(), getFile()))
+      .orElse( false);
+    }
+
   private final String annotation_;
   private final String className_;
   private final boolean runtime_;
+  private File file_;
   }

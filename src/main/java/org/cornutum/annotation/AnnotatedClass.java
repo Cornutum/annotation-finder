@@ -7,8 +7,8 @@
 
 package org.cornutum.annotation;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -19,17 +19,25 @@ public class AnnotatedClass extends Annotated
   /**
    * Creates a new AnnotatedClass instance.
    */
-  protected AnnotatedClass( String annotation, String className, boolean isRuntime)
+  public AnnotatedClass( String annotation, String className, boolean isRuntime)
     {
-    super( annotation, className, isRuntime);
+    this( annotation, className, isRuntime, null);
     }
   
   /**
    * Creates a new AnnotatedClass instance.
    */
-  protected AnnotatedClass( Class<? extends Annotation> annotation, String className, boolean isRuntime)
+  public AnnotatedClass( String annotation, String className, boolean isRuntime, File file)
     {
-    this( Optional.ofNullable( annotation).map( Class::getName).orElse( null), className, isRuntime);
+    super( annotation, className, isRuntime, file);
+    }
+  
+  /**
+   * Creates a new AnnotatedClass instance.
+   */
+  public AnnotatedClass( Class<? extends Annotation> annotation, String className, boolean isRuntime, File file)
+    {
+    this( Optional.ofNullable( annotation).map( Class::getName).orElse( null), className, isRuntime, file);
     }
 
   /**
@@ -42,25 +50,12 @@ public class AnnotatedClass extends Annotated
 
   public int hashCode()
     {
-    return
-      Objects.hashCode( getClass())
-      ^ Objects.hashCode( getAnnotation())
-      ^ Objects.hashCode( getClassName())
-      ^ Objects.hashCode( isRuntime())
-      ;
+    return super.hashCode();
     }
 
   public boolean equals( Object object)
     {
-    return
-      Optional.ofNullable( object)
-      .filter( other -> getClass().equals( other.getClass()))
-      .map( other -> (AnnotatedClass) other)
-      .map( other ->
-            Objects.equals( other.getAnnotation(), getAnnotation())
-            && Objects.equals( other.getClassName(), getClassName())
-            && Objects.equals( other.isRuntime(), isRuntime()))
-      .orElse( false);
+    return super.equals( object);
     }
 
   public String toString()
@@ -70,6 +65,7 @@ public class AnnotatedClass extends Annotated
       .append( ToString.simpleClassName( getAnnotation()))
       .append( "class", getClassName())
       .append( "runtime", isRuntime())
+      .append( "file", Optional.ofNullable( getFile()).map( File::getName).orElse( null))
       .toString();
     }
   }
