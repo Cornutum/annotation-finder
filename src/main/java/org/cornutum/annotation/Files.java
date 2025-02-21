@@ -114,9 +114,25 @@ public final class Files
     }
 
   /**
+   * Returns the files from the given ClassLoader that contain the given packages.
+   */
+  public static Set<File> classPathFor( ClassLoader loader, String... packageNames)
+    {
+    return classPathFor( loader, Arrays.asList( packageNames));
+    }
+
+  /**
    * Returns the files on the current class path that contain the given packages.
    */
   public static Set<File> classPathFor( Collection<String> packageNames)
+    {
+    return classPathFor( Thread.currentThread().getContextClassLoader(), packageNames);
+    }
+
+  /**
+   * Returns the files from the given ClassLoader that contain the given packages.
+   */
+  public static Set<File> classPathFor( ClassLoader loader, Collection<String> packageNames)
     {
     return
       packageNames
@@ -127,7 +143,7 @@ public final class Files
           {
           return
             Collections.list(
-              Thread.currentThread().getContextClassLoader().getResources(
+              loader.getResources(
                 Arrays.asList( packageName.split( "\\."))
                 .stream()
                 .collect( joining( "/", "", "/"))))
