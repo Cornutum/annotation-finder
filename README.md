@@ -158,3 +158,22 @@ public void findSpecificInJar()
   * **How can I run the examples?**
 
     Try running the [ExampleTest](https://github.com/Cornutum/annotation-finder/blob/master/src/test/java/org/cornutum/annotation/examples/ExampleTest.java).
+
+  * **How does this compare with the `AnnotationDetector`?**
+
+    The project was inspired by the [`AnnotationDetector`](https://github.com/rmuller/infomas-asl?tab=readme-ov-file#annotation-detector)
+    from [Ronald Muller](https://www.linkedin.com/in/ronaldkmuller/) (XIAM Solutions BV) and reuses some of its code. But the `Finder` offers
+    some important new features.
+
+    * **Stream interface**: Results can be handled using all of the capabilities of a Java `Stream`. In particular, you can use `findFirst()` to
+      terminate the search when a specific element is found.
+
+    * **Extensible filtering**: The "what" of the search is decoupled from the "where". You can easily inject your own `AnnotationFilter`
+      implementation.
+
+    * **Decoupled from the class path**: You can find references to annotation classes that are not currently loaded. You can search
+      directories and JAR files that are not currently loaded.
+
+    * **Efficient search**: Large classes are searched without reading the entire class file into memory. During the search, at most one class file input stream
+      is open.
+
