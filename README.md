@@ -162,14 +162,15 @@ public void findSpecificInJar()
   * **How does this compare with the `AnnotationDetector`?**
 
     The project was inspired by the [`AnnotationDetector`](https://github.com/rmuller/infomas-asl?tab=readme-ov-file#annotation-detector)
-    from [Ronald Muller](https://www.linkedin.com/in/ronaldkmuller/) (XIAM Solutions BV) and reuses some of its code. But the `Finder` offers
-    some important new features.
+    from [Ronald Muller](https://www.linkedin.com/in/ronaldkmuller/) (XIAM Solutions BV) and reuses some of its code.
+    Like the `AnnotationDetector`, the `Finder` is fast and light-weight, with no additional dependencies.
+    But the `Finder` also offers some important new features.
 
     * **Stream interface**: Results can be handled using all of the capabilities of a Java `Stream`. In particular, you can use `findFirst()` to
       terminate the search when a specific element is found.
 
     * **Extensible filtering**: The "what" of the search is decoupled from the "where". You can easily inject your own `AnnotationFilter`
-      implementation.
+      implementation. You can use a `PackageFilter` to limit any search to specific packages.
 
     * **Decoupled from the class path**: You can find references to annotation classes that are not currently loaded. You can search
       directories and JAR files that are not currently loaded.
