@@ -14,11 +14,17 @@ import java.util.Optional;
  */
 public class AllAnnotated implements AnnotationFilter
   {
+  /**
+   * Accepts any annotation.
+   */
   public Optional<String> acceptAnnotation( String rawTypeName)
     {
     return Optional.of( ClassData.toClassName( rawTypeName));
     }
 
+  /**
+   * Accepts annotated elements of any class.
+   */
   public boolean acceptClass( String className)
     {
     return true;
