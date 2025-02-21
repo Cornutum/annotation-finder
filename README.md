@@ -10,6 +10,8 @@
   * [How Does It Work?](#how-does-it-work)
   * [Examples](#examples)
     * [Find all annotated elements in classes on the class path](#find-all-annotated-elements-in-classes-on-the-class-path)
+    * [Find `Deprecated` methods in the system class path](#find-deprecated-methods-in-the-system-class-path)
+    * [Find specific annotations in external JAR files](#find-specific-annotations-in-external-jar-files)
   * [FAQs](#faqs)
 
 ## What's New? ##
@@ -68,6 +70,71 @@ public void findAllInClasspath()
 
     // ...looking for: all annotations in all classes (the default)
     .find();
+
+  // Then...
+  printAnnotated( stream);
+  }
+```
+
+### Find `Deprecated` methods in the system class path ###
+
+```java
+import org.cornutum.annotation.Annotated;
+import org.cornutum.annotation.Finder;
+import org.cornutum.annotation.PackageFilter;
+
+@Test
+public void findDeprecatedMethodsInSystemClassPath()
+  {
+  // When...
+  Stream<Annotated> stream =
+
+    new Finder()
+
+    // ...searching in: all members of the class path used to start the JVM
+    .inSystemClassPath()
+
+    // ...looking for: Deprecated elements
+    .filter( new PackageFilter( Deprecated.class))
+      
+    // ...returning: only annotated methods
+    .find()
+    .filter( Annotated::isMethod);
+
+  // Then...
+  printAnnotated( stream);
+  }
+```
+
+### Find specific annotations in external JAR files ###
+
+```java
+import org.cornutum.annotation.Annotated;
+import org.cornutum.annotation.Finder;
+import org.cornutum.annotation.PackageFilter;
+
+@Test
+public void findSpecificInJar()
+  {
+  // When...
+  Stream<Annotated> stream =
+
+    new Finder()
+
+    // ...searching in: external JAR files not on the class path
+    .inClasses(
+      getResourceFile( getClass(), "tcases-openapi.jar"),
+      getResourceFile( getClass(), "tcases-rest-assured.jar"))
+
+    // ...looking for: specific annotations in certain packages
+    .filter(
+      new PackageFilter()
+      .annotation(
+        "org.cornutum.tcases.openapi.testwriter.ApiTestCaseWriter",
+        "org.cornutum.tcases.openapi.testwriter.ApiTestWriter")
+      .inPackage( "org.cornutum.tcases.openapi.restassured"))
+
+      .find();
 
   // Then...
   printAnnotated( stream);
