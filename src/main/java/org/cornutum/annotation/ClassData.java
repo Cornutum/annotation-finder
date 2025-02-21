@@ -491,7 +491,7 @@ public abstract class ClassData
   private List<Annotated> annotated_ = new ArrayList<Annotated>();
   private AnnotationFilter filter_;
 
-  private static final Pattern RAW_TYPE_NAME_PATTERN = Pattern.compile( "L([\\w/]+);");
+  private static final Pattern RAW_TYPE_NAME_PATTERN = Pattern.compile( "L([\\w/\\$]+);");
   
   /**
    * Represents the current context for recognizing annotations in this class.
