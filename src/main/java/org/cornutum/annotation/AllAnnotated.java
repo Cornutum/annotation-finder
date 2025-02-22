@@ -30,5 +30,12 @@ public class AllAnnotated implements AnnotationFilter
     return true;
     }
 
+  public String toString()
+    {
+    return
+      ToString.of( this)
+      .toString();
+    }
+
   public static final AllAnnotated INSTANCE = new AllAnnotated();
   }

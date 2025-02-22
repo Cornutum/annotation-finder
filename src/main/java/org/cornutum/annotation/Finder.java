@@ -87,6 +87,15 @@ public class Finder
     return toStream( new ClassPathAnnotated( classPath_, filter_));
     }
 
+  public String toString()
+    {
+    return
+      ToString.of( this)
+      .append( "filter", filter_)
+      .append( "classes", classPath_.stream().map( File::getName).collect( toList()))
+      .toString();
+    }
+
   private AnnotationFilter filter_;
   private Set<File> classPath_ = new LinkedHashSet<File>();
   }
