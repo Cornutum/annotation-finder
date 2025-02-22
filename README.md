@@ -1,6 +1,6 @@
 # annotation-finder
 
-[![Maven](https://img.shields.io/badge/maven-1.0.0-green.svg)](https://search.maven.org/search?q=annotation-finder)
+[![Maven](https://img.shields.io/badge/maven-1.0.0-green.svg)](https://search.maven.org/search?q=org.cornutum.annotation.finder)
 [![Javadoc](https://img.shields.io/badge/javadoc-1.0.0-green.svg)](https://javadoc.io/doc/org.cornutum.annotation/finder/latest/index.html)
 
 ## Contents ##
@@ -17,7 +17,7 @@
 ## What's New? ##
 
   * The latest version ([1.0.0](https://github.com/Cornutum/regexp-gen/releases/tag/release-1.0.0))
-    is now available at the [Maven Central Repository](https://search.maven.org/search?q=annotation-finder).
+    is now available at the [Maven Central Repository](https://search.maven.org/search?q=org.cornutum.annotation.finder).
 
 ## What Is It? ##
 
