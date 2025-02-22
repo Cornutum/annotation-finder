@@ -16,7 +16,7 @@
 
 ## What's New? ##
 
-  * The latest version ([1.0.0](https://github.com/Cornutum/regexp-gen/releases/tag/release-1.0.0))
+  * The latest version ([1.0.0](https://github.com/Cornutum/annotation-finder/releases/tag/release-1.0.0))
     is now available at the [Maven Central Repository](https://search.maven.org/search?q=org.cornutum.annotation.finder).
 
 ## What Is It? ##
