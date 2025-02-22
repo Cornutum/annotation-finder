@@ -7,7 +7,7 @@
     <groupId>org.cornutum.annotation</groupId>
     <artifactId>finder</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <name>Annotation Finder</name>
     <description>Finds class path elements associated with specified annotations</description>

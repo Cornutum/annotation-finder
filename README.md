@@ -1,6 +1,6 @@
 # annotation-finder
 
-[![Maven](https://img.shields.io/badge/maven-1.0.0-green.svg)](https://search.maven.org/search?q=annotation-finder)
+[![Maven](https://img.shields.io/badge/maven-1.0.0-green.svg)](https://search.maven.org/search?q=org.cornutum.annotation.finder)
 [![Javadoc](https://img.shields.io/badge/javadoc-1.0.0-green.svg)](https://javadoc.io/doc/org.cornutum.annotation/finder/latest/index.html)
 
 ## Contents ##
@@ -10,12 +10,14 @@
   * [How Does It Work?](#how-does-it-work)
   * [Examples](#examples)
     * [Find all annotated elements in classes on the class path](#find-all-annotated-elements-in-classes-on-the-class-path)
+    * [Find `Deprecated` methods in the system class path](#find-deprecated-methods-in-the-system-class-path)
+    * [Find specific annotations in external JAR files](#find-specific-annotations-in-external-jar-files)
   * [FAQs](#faqs)
 
 ## What's New? ##
 
   * The latest version ([1.0.0](https://github.com/Cornutum/regexp-gen/releases/tag/release-1.0.0))
-    is now available at the [Maven Central Repository](https://search.maven.org/search?q=annotation-finder).
+    is now available at the [Maven Central Repository](https://search.maven.org/search?q=org.cornutum.annotation.finder).
 
 ## What Is It? ##
 
@@ -74,6 +76,71 @@ public void findAllInClasspath()
   }
 ```
 
+### Find `Deprecated` methods in the system class path ###
+
+```java
+import org.cornutum.annotation.Annotated;
+import org.cornutum.annotation.Finder;
+import org.cornutum.annotation.PackageFilter;
+
+@Test
+public void findDeprecatedMethodsInSystemClassPath()
+  {
+  // When...
+  Stream<Annotated> stream =
+
+    new Finder()
+
+    // ...searching in: all members of the class path used to start the JVM
+    .inSystemClassPath()
+
+    // ...looking for: Deprecated elements
+    .filter( new PackageFilter( Deprecated.class))
+      
+    // ...returning: only annotated methods
+    .find()
+    .filter( Annotated::isMethod);
+
+  // Then...
+  printAnnotated( stream);
+  }
+```
+
+### Find specific annotations in external JAR files ###
+
+```java
+import org.cornutum.annotation.Annotated;
+import org.cornutum.annotation.Finder;
+import org.cornutum.annotation.PackageFilter;
+
+@Test
+public void findSpecificInJar()
+  {
+  // When...
+  Stream<Annotated> stream =
+
+    new Finder()
+
+    // ...searching in: external JAR files not on the class path
+    .inClasses(
+      getResourceFile( getClass(), "tcases-openapi.jar"),
+      getResourceFile( getClass(), "tcases-rest-assured.jar"))
+
+    // ...looking for: specific annotations in certain packages
+    .filter(
+      new PackageFilter()
+      .annotation(
+        "org.cornutum.tcases.openapi.testwriter.ApiTestCaseWriter",
+        "org.cornutum.tcases.openapi.testwriter.ApiTestWriter")
+      .inPackage( "org.cornutum.tcases.openapi.restassured"))
+
+      .find();
+
+  // Then...
+  printAnnotated( stream);
+  }
+```
+
 ## FAQs ##
 
   * **How do I add this as a dependency to my Maven project?**
@@ -91,3 +158,23 @@ public void findAllInClasspath()
   * **How can I run the examples?**
 
     Try running the [ExampleTest](https://github.com/Cornutum/annotation-finder/blob/master/src/test/java/org/cornutum/annotation/examples/ExampleTest.java).
+
+  * **How does this compare with the `AnnotationDetector`?**
+
+    The project was inspired by the [`AnnotationDetector`](https://github.com/rmuller/infomas-asl?tab=readme-ov-file#annotation-detector)
+    from [Ronald Muller](https://www.linkedin.com/in/ronaldkmuller/) (XIAM Solutions BV) and reuses some of its code.
+    Like the `AnnotationDetector`, the `Finder` is fast and light-weight, with no additional dependencies.
+    But the `Finder` also offers some important new features.
+
+    * **Stream interface**: Results can be handled using all of the capabilities of a Java `Stream`. In particular, you can use `findFirst()` to
+      terminate the search when a specific element is found.
+
+    * **Extensible filtering**: The "what" of the search is decoupled from the "where". You can easily inject your own `AnnotationFilter`
+      implementation. You can use a `PackageFilter` to limit any search to specific packages.
+
+    * **Decoupled from the class path**: You can find references to annotation classes that are not currently loaded. You can search
+      directories and JAR files that are not currently loaded.
+
+    * **Efficient search**: Large classes are searched without reading the entire class file into memory. During the search, at most one class file input stream
+      is open.
+
